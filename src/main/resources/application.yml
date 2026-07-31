@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://ep-sweet-dream-ax63krct-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require}
+    username: ${DATASOURCE_USERNAME:neondb_owner}
+    password: ${DATASOURCE_PASSWORD:npg_gA6GTjSW8PoI}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+server:
+  port: ${SERVER_PORT:8080}
