@@ -1,11 +1,10 @@
 package school.hei.demo.model;
 
-import lombok.*;
-import school.hei.demo.PojaGenerated;
-
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
+import lombok.*;
+import school.hei.demo.PojaGenerated;
 
 @PojaGenerated
 @Getter
@@ -15,15 +14,15 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Reservation {
 
-    @EqualsAndHashCode.Include private UUID id;
+  @EqualsAndHashCode.Include private UUID id;
 
-    private Instant createdAt;
+  private Instant createdAt;
 
-    private ReservationStatus status;
+  private ReservationStatus status;
 
-    private Projection projection;
+  private Projection projection;
 
-    private User user;
+  private User user;
 
-    private Set<Seat> seats;
+  private Set<Seat> seats;
 }

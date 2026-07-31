@@ -1,9 +1,8 @@
 package school.hei.demo.model;
 
+import java.util.UUID;
 import lombok.*;
 import school.hei.demo.PojaGenerated;
-
-import java.util.UUID;
 
 @PojaGenerated
 @Getter
@@ -13,9 +12,9 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Room {
 
-    @EqualsAndHashCode.Include private UUID id;
+  @EqualsAndHashCode.Include private UUID id;
 
-    private String number;
+  private String number;
 
-    private int capacity;
+  private int capacity;
 }

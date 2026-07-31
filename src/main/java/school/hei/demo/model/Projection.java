@@ -1,11 +1,10 @@
 package school.hei.demo.model;
 
-import lombok.*;
-import school.hei.demo.PojaGenerated;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+import lombok.*;
+import school.hei.demo.PojaGenerated;
 
 @PojaGenerated
 @Getter
@@ -15,13 +14,13 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Projection {
 
-    @EqualsAndHashCode.Include private UUID id;
+  @EqualsAndHashCode.Include private UUID id;
 
-    private Instant datetime;
+  private Instant datetime;
 
-    private BigDecimal setPrice;
+  private BigDecimal setPrice;
 
-    private Movie movie;
+  private Movie movie;
 
-    private Room room;
+  private Room room;
 }

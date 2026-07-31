@@ -1,13 +1,12 @@
 package school.hei.demo.repository.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import school.hei.demo.PojaGenerated;
-import school.hei.demo.model.Genre;
-
 import java.time.Duration;
 import java.util.Set;
 import java.util.UUID;
+import lombok.*;
+import school.hei.demo.PojaGenerated;
+import school.hei.demo.model.Genre;
 
 @PojaGenerated
 @Entity
@@ -18,17 +17,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class JMovie {
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private UUID id;
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private UUID id;
 
-    private String title;
+  private String title;
 
-    @ElementCollection(targetClass = Genre.class)
-    @CollectionTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Genre> genres;
+  @ElementCollection(targetClass = Genre.class)
+  @CollectionTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"))
+  @Enumerated(EnumType.STRING)
+  private Set<Genre> genres;
 
-    private Duration duration;
+  private Duration duration;
 }

@@ -1,10 +1,9 @@
 package school.hei.demo.model;
 
-import lombok.*;
-import school.hei.demo.PojaGenerated;
-
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.*;
+import school.hei.demo.PojaGenerated;
 
 @PojaGenerated
 @Getter
@@ -14,19 +13,19 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
-    @EqualsAndHashCode.Include private UUID id;
+  @EqualsAndHashCode.Include private UUID id;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    private LocalDate birthDate;
+  private LocalDate birthDate;
 
-    private String email;
+  private String email;
 
-    private String password;
+  private String password;
 
-    private String phone;
+  private String phone;
 
-    private UserRole role;
+  private UserRole role;
 }
