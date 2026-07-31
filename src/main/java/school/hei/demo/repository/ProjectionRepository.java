@@ -1,0 +1,49 @@
+package school.hei.demo.repository;
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
+import school.hei.demo.model.Projection;
+import school.hei.demo.repository.model.JMovie;
+import school.hei.demo.repository.model.JProjection;
+import school.hei.demo.repository.model.JRoom;
+
+import java.util.List;
+
+@Repository
+@AllArgsConstructor
+public class ProjectionRepository {
+    private JProjectionRepository jProjectionRepository;
+    private JMovieRepository jMovieRepository;
+    private JRoomRepository jRoomRepository;
+
+    public List<Projection> findAll() {
+        return jProjectionRepository.findAll().stream().map(ProjectionRepository::toDomain).toList();
+    }
+
+    public Projection save (Projection projection) {
+        JMovie jMovie =
+                jMovieRepository
+                        .findById(projection.getMovie().getUuid())
+                        .orElseThrow(
+                                () -> new IllegalStateException("Room "+ projection.getMovie().getUuid()+" not found"));
+        JRoom jRoom =
+                jRoomRepository
+                        .findById(projection.getMovie().getUuid())
+                        .orElseThrow(
+                                () -> new IllegalStateException("Room "+ projection.getMovie().getUuid()+" not found"));
+        JProjection toSave =
+                new JProjection(
+                        projection.getId(), projection.getDatetime(), projection.getSeatPrice(), jMovie, jRoom);
+        return toDomain(jProjectionRepository.save(toSave));
+    }
+
+    public static Projection toDomain(JProjection entity){
+        return new Projection(
+                entity.getId(),
+                entity.getDatetime(),
+                entity.getSeatPrice(),
+                MovieRepository.toDomain(entity.getMovie()),
+                RoomRepository.toDomain(entity.getRoom());
+        )
+    }
+}
