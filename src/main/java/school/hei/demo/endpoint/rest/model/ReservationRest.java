@@ -6,10 +6,9 @@ import java.util.UUID;
 import school.hei.demo.model.ReservationStatus;
 
 public record ReservationRest(
-        UUID id,
-        Instant createdAt,
-        ReservationStatus status,
-        UUID projectionId,
-        UUID userId,
-        Set<UUID> seatIds) {}
-
+    UUID id,
+    Instant createdAt,
+    ReservationStatus status,
+    UUID projectionId,
+    UUID userId,
+    Set<UUID> seatIds) {}

@@ -4,10 +4,5 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-public record ProjectionRest (
-        UUID id,
-        Instant Datetime,
-        BigDecimal seatPrice,
-        UUID movieId,
-        UUID roomid
-){}
+public record ProjectionRest(
+    UUID id, Instant Datetime, BigDecimal seatPrice, UUID movieId, UUID roomid) {}
