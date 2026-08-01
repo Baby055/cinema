@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.hei.demo.endpoint.rest.NotFoundException;
+import school.hei.demo.endpoint.rest.exception.NotFoundException;
 import school.hei.demo.endpoint.rest.model.SaveMovie;
 import school.hei.demo.model.Movie;
 import school.hei.demo.repository.MovieRepository;
