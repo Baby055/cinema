@@ -1,6 +1,7 @@
 package school.hei.demo.repository.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 import lombok.*;
@@ -18,6 +19,8 @@ import school.hei.demo.model.ReservationStatus;
 @Builder
 public class JReservation {
   @Id @GeneratedValue @UuidGenerator private UUID id;
+
+  private Instant createdAt;
 
   @Enumerated(EnumType.STRING)
   private ReservationStatus status;
