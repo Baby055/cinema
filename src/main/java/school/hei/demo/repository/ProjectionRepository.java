@@ -1,6 +1,8 @@
 package school.hei.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import school.hei.demo.model.Projection;
@@ -17,6 +19,10 @@ public class ProjectionRepository {
 
   public List<Projection> findAll() {
     return jProjectionRepository.findAll().stream().map(ProjectionRepository::toDomain).toList();
+  }
+
+  public Optional<Projection> findById(UUID id) {
+    return jProjectionRepository.findById(id).map(ProjectionRepository::toDomain);
   }
 
   public Projection save(Projection projection) {
