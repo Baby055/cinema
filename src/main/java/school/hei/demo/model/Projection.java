@@ -18,7 +18,7 @@ public class Projection {
 
   private Instant datetime;
 
-  private BigDecimal setPrice;
+  private BigDecimal seatPrice;
 
   private Movie movie;
 

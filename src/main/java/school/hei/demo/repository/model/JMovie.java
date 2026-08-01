@@ -29,5 +29,7 @@ public class JMovie {
   @Enumerated(EnumType.STRING)
   private Set<Genre> genres;
 
+  private String description;
+
   private Duration duration;
 }
