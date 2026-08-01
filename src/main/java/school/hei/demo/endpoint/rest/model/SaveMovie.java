@@ -2,7 +2,12 @@ package school.hei.demo.endpoint.rest.model;
 
 import java.util.Set;
 import java.util.UUID;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import school.hei.demo.model.Genre;
 
 public record SaveMovie(
-    UUID id, String title, Set<Genre> genres, String description, long durationInMinutes) {}
+        UUID id, @NotBlank String title, @NotEmpty Set<Genre> genres, @NotBlank String description, @NotNull @Positive long durationInMinutes) {}
