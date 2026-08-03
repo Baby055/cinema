@@ -6,13 +6,12 @@ import school.hei.demo.model.Projection;
 
 @Component
 public class ProjectionMapper {
-    public ProjectionRest toRest(Projection projection){
-        return new ProjectionRest(
-                projection.getId(),
-                projection.getDatetime(),
-                projection.getSeatPrice(),
-                projection.getMovie().getUuid(),
-                projection.getRoom().getId()
-        );
-    }
+  public ProjectionRest toRest(Projection projection) {
+    return new ProjectionRest(
+        projection.getId(),
+        projection.getDatetime(),
+        projection.getSeatPrice(),
+        projection.getMovie().getUuid(),
+        projection.getRoom().getId());
+  }
 }

@@ -6,13 +6,12 @@ import school.hei.demo.model.Movie;
 
 @Component
 public class MovieMapper {
-    public MovieRest toRest(Movie movie) {
-        return new MovieRest(
-                movie.getUuid(),
-                movie.getTitle(),
-                movie.getGenres(),
-                movie.getDescription(),
-                movie.getDuration().toMinutes()
-        );
-    }
+  public MovieRest toRest(Movie movie) {
+    return new MovieRest(
+        movie.getUuid(),
+        movie.getTitle(),
+        movie.getGenres(),
+        movie.getDescription(),
+        movie.getDuration().toMinutes());
+  }
 }
