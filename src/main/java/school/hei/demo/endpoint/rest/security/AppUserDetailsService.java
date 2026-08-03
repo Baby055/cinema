@@ -12,13 +12,13 @@ import school.hei.demo.repository.UserRepository;
 @Service
 @AllArgsConstructor
 public class AppUserDetailsService implements UserDetailsService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository
-                .findByEmail(email)
-                .map(AuthenticatedUser::new)
-                .orElseThrow(() -> new UsernameNotFoundException("No User with this email : " + email));
-    }
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    return userRepository
+        .findByEmail(email)
+        .map(AuthenticatedUser::new)
+        .orElseThrow(() -> new UsernameNotFoundException("No User with this email : " + email));
+  }
 }

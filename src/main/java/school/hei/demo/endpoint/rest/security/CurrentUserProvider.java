@@ -7,7 +7,8 @@ import school.hei.demo.PojaGenerated;
 @PojaGenerated
 @Component
 public class CurrentUserProvider {
-    public AuthenticatedUser get(){
-        return (AuthenticatedUser)  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
+  public AuthenticatedUser get() {
+    return (AuthenticatedUser)
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
 }
