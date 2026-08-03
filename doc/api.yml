@@ -1,0 +1,412 @@
+openapi: 3.0.3
+
+info:
+  title: Cinema Reservation API
+  description: >
+    REST API for a cinema reservation system: movies, projections (showings),
+    rooms/seats and reservations. Roles are CLIENT, EMPLOYEE and MANAGER; see
+    each operation's description for the authorization rules that apply.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+
+tags:
+  - name: Movie
+  - name: Projection
+  - name: Reservation
+  - name: Health
+
+security:
+  - basicAuth: []
+
+paths:
+  /ping:
+    get:
+      tags: [Health]
+      summary: Liveness check
+      security: []
+      responses:
+        "200":
+          description: The service is up
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+
+  /movies:
+    get:
+      tags: [Movie]
+      summary: List all movies
+      description: Open to everyone (any authenticated role).
+      responses:
+        "200":
+          description: List of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieRest"
+    put:
+      tags: [Movie]
+      summary: Create or update a movie
+      description: >
+        MANAGER only. `id` is omitted (or null) to create a movie, set to an
+        existing id to update it. Returns 403 for CLIENT and EMPLOYEE.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveMovie"
+      responses:
+        "200":
+          description: The created/updated movie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MovieRest"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /movies/{id}:
+    get:
+      tags: [Movie]
+      summary: Get a movie by id
+      description: Open to everyone (any authenticated role).
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      responses:
+        "200":
+          description: The movie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MovieRest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /projections:
+    get:
+      tags: [Projection]
+      summary: List all projections
+      description: Public endpoint — no authentication required.
+      security: []
+      responses:
+        "200":
+          description: List of projections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProjectionRest"
+
+  /projections/{id}:
+    get:
+      tags: [Projection]
+      summary: Get a projection by id
+      description: Public endpoint — no authentication required.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      responses:
+        "200":
+          description: The projection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectionRest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /projection:
+    put:
+      tags: [Projection]
+      summary: Create or update a projection
+      description: >
+        MANAGER only. `id` is omitted (or null) to create a projection, set to
+        an existing id to update it. Returns 403 for CLIENT and EMPLOYEE.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveProjection"
+      responses:
+        "200":
+          description: The created/updated projection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectionRest"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /reservations:
+    get:
+      tags: [Reservation]
+      summary: List all reservations
+      description: EMPLOYEE and MANAGER only. Returns 403 for CLIENT.
+      responses:
+        "200":
+          description: List of reservations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReservationRest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /reservations/{id}:
+    get:
+      tags: [Reservation]
+      summary: Get a reservation by id
+      description: >
+        A CLIENT can only read their own reservation (403 otherwise).
+        EMPLOYEE and MANAGER can read any reservation.
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      responses:
+        "200":
+          description: The reservation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationRest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /reservation:
+    put:
+      tags: [Reservation]
+      summary: Create or update (validate/cancel) a reservation
+      description: >
+        `id` is omitted (or null) to create a reservation: any authenticated
+        role can create one, and it is always created with status PENDING
+        regardless of the `status` field submitted. `id` is set to an existing
+        reservation to update it: a CLIENT can only update their own
+        reservation and cannot change its `status` (403); only EMPLOYEE and
+        MANAGER can validate/cancel a reservation by changing `status`.
+        A seat already booked (non-CANCELED) for the same projection is
+        rejected with 400.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveReservation"
+      responses:
+        "200":
+          description: The created/updated reservation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReservationRest"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  parameters:
+    IdPathParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  responses:
+    BadRequest:
+      description: The request is invalid (e.g. a seat is already booked)
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
+    Forbidden:
+      description: The authenticated user is not allowed to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
+    NotFound:
+      description: The requested resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
+
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: You cannot access another client's reservation
+
+    Genre:
+      type: string
+      enum: [THRILLER, ROMANCE, COMEDY, DRAMA, ACTION, SCI_FI, FANTASY, ANIMATION]
+
+    ReservationStatus:
+      type: string
+      enum: [PENDING, SUCCESS, CANCELED]
+
+    MovieRest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        genres:
+          type: array
+          items:
+            $ref: "#/components/schemas/Genre"
+        description:
+          type: string
+        durationInMinutes:
+          type: integer
+          format: int64
+      required: [id, title, genres, description, durationInMinutes]
+
+    SaveMovie:
+      type: object
+      description: id is null on creation, set on update.
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        title:
+          type: string
+        genres:
+          type: array
+          items:
+            $ref: "#/components/schemas/Genre"
+        description:
+          type: string
+        durationInMinutes:
+          type: integer
+          format: int64
+      required: [title, genres, description, durationInMinutes]
+
+    ProjectionRest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        datetime:
+          type: string
+          format: date-time
+        seatPrice:
+          type: number
+          format: decimal
+        movieId:
+          type: string
+          format: uuid
+        roomId:
+          type: string
+          format: uuid
+      required: [id, datetime, seatPrice, movieId, roomId]
+
+    SaveProjection:
+      type: object
+      description: id is null on creation, set on update.
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        datetime:
+          type: string
+          format: date-time
+        seatPrice:
+          type: number
+          format: decimal
+        movieId:
+          type: string
+          format: uuid
+        roomId:
+          type: string
+          format: uuid
+      required: [datetime, seatPrice, movieId, roomId]
+
+    ReservationRest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          $ref: "#/components/schemas/ReservationStatus"
+        projectionId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        seatIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required: [id, createdAt, status, projectionId, userId, seatIds]
+
+    SaveReservation:
+      type: object
+      description: >
+        id is null on creation, set on update. status is only honored for
+        EMPLOYEE/MANAGER callers updating an existing reservation.
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        projectionId:
+          type: string
+          format: uuid
+        seatIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        status:
+          $ref: "#/components/schemas/ReservationStatus"
+      required: [projectionId, seatIds]
