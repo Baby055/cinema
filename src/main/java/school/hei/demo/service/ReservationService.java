@@ -12,6 +12,8 @@ import school.hei.demo.endpoint.rest.exception.BadRequestException;
 import school.hei.demo.endpoint.rest.exception.ForbiddenException;
 import school.hei.demo.endpoint.rest.exception.NotFoundException;
 import school.hei.demo.endpoint.rest.model.SaveReservation;
+import school.hei.demo.endpoint.rest.security.AuthenticatedUser;
+import school.hei.demo.endpoint.rest.security.CurrentUserProvider;
 import school.hei.demo.model.*;
 import school.hei.demo.repository.ProjectionRepository;
 import school.hei.demo.repository.ReservationRepository;
