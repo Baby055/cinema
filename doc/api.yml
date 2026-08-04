@@ -16,6 +16,7 @@ tags:
   - name: Movie
   - name: Projection
   - name: Reservation
+  - name: User
   - name: Health
 
 security:
@@ -106,6 +107,78 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProjectionRest"
+
+  /users:
+    get:
+      tags: [User]
+      summary: List all users
+      description: MANAGER only. Returns 403 for CLIENT and EMPLOYEE.
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserRest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    put:
+      tags: [User]
+      summary: Create or update a user
+      description: >
+        `id` is omitted (or null) to create a user: any authenticated role can
+        create one, and the role is forced to CLIENT unless the caller is a
+        MANAGER. `id` is set to an existing user to update it: a user can only
+        update their own profile (403 otherwise); only a MANAGER can change a
+        user's role. A password is required when creating a user, and is
+        re-hashed on update when provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveUser"
+      responses:
+        "200":
+          description: The created/updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRest"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /users/{id}:
+    get:
+      tags: [User]
+      summary: Get a user by id
+      description: >
+        Any authenticated user can read their own profile. MANAGER can read any
+        user. Returns 403 for a CLIENT or EMPLOYEE trying to read another
+        user's profile.
+      parameters:
+        - $ref: "#/components/parameters/IdPathParam"
+      responses:
+        "200":
+          description: The user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /projections/{id}:
     get:
@@ -257,6 +330,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ApiError"
+    Unauthorized:
+      description: Authentication is required to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
 
   schemas:
     ApiError:
@@ -282,6 +361,60 @@ components:
     ReservationStatus:
       type: string
       enum: [PENDING, SUCCESS, CANCELED]
+
+    UserRole:
+      type: string
+      enum: [CLIENT, EMPLOYEE, MANAGER]
+
+    UserRest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        role:
+          $ref: "#/components/schemas/UserRole"
+      required: [id, firstName, lastName, birthdate, email, phone, role]
+
+    SaveUser:
+      type: object
+      description: id is null on creation, set on update.
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          nullable: true
+          description: Required on creation, re-hashed on update when provided.
+        phone:
+          type: string
+        role:
+          $ref: "#/components/schemas/UserRole"
+      required: [firstName, lastName, birthdate, email, phone]
 
     MovieRest:
       type: object

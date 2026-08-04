@@ -1,7 +1,9 @@
 package school.hei.demo.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import school.hei.demo.model.User;
@@ -11,6 +13,12 @@ import school.hei.demo.repository.model.JUser;
 @AllArgsConstructor
 public class UserRepository {
   private JUserRepository jUserRepository;
+
+  public List<User> findAll() {
+    return StreamSupport.stream(jUserRepository.findAll().spliterator(), false)
+        .map(UserRepository::toDomain)
+        .toList();
+  }
 
   public Optional<User> findById(UUID id) {
     return jUserRepository.findById(id).map(UserRepository::toDomain);
