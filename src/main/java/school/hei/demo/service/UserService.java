@@ -15,6 +15,7 @@ import school.hei.demo.model.User;
 import school.hei.demo.model.UserRole;
 import school.hei.demo.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +30,30 @@ public class UserService {
     public User save(SaveUser toSave){
         Optional<AuthenticatedUser> currentUser = currentUserProvider.getIfPresent();
         return toSave.id() == null ? create(toSave, currentUser) : update(toSave, currentUser);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findById(UUID id) {
+        AuthenticatedUser requester =
+                currentUserProvider
+                        .getIfPresent()
+                        .orElseThrow(
+                                () -> new UnauthorizedException("You must be authenticated to view a user")
+                        );
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
+
+        boolean isSelf = requester.getId().equals(user.getId());
+        boolean isManager = requester.getRole() == UserRole.MANAGER;
+        if (!isSelf && !isManager) {
+            throw new ForbiddenException("You can only view your own profile");
+        }
+        return user;
     }
 
     private User create(SaveUser toSave, Optional<AuthenticatedUser> currentUser){

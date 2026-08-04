@@ -1,5 +1,6 @@
 package school.hei.demo.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,10 @@ import school.hei.demo.repository.model.JUser;
 @AllArgsConstructor
 public class UserRepository {
   private JUserRepository jUserRepository;
+
+  public List<User> findAll() {
+    return ((List<JUser>) jUserRepository.findAll()).stream().map(UserRepository::toDomain).toList();
+  }
 
   public Optional<User> findById(UUID id) {
     return jUserRepository.findById(id).map(UserRepository::toDomain);
