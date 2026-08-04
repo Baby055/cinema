@@ -6,15 +6,14 @@ import school.hei.demo.model.User;
 
 @Component
 public class UserMapper {
-    public UserRest toRest(User user) {
-        return new UserRest(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getBirthDate(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getRole()
-        );
-    }
+  public UserRest toRest(User user) {
+    return new UserRest(
+        user.getId(),
+        user.getFirstName(),
+        user.getLastName(),
+        user.getBirthDate(),
+        user.getEmail(),
+        user.getPhone(),
+        user.getRole());
+  }
 }

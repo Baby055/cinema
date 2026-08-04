@@ -15,7 +15,8 @@ public class CurrentUserProvider {
 
   public Optional<AuthenticatedUser> getIfPresent() {
     var authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof AuthenticatedUser authenticatedUser) {
+    if (authentication != null
+        && authentication.getPrincipal() instanceof AuthenticatedUser authenticatedUser) {
       return Optional.of(authenticatedUser);
     }
     return Optional.empty();
