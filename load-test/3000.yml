@@ -1,0 +1,15 @@
+config:
+  target: "https://62wkmijm5sl2rvqjd6jr3rybmy0xasqm.lambda-url.eu-west-3.on.aws/projections"
+  phases:
+    - duration: 60
+      arrivalRate: 50
+      name: "3000 requêtes en 1 minute (50 req/s)"
+  defaults:
+    headers:
+      Accept: "application/json"
+
+scenarios:
+  - name: "GET /projections"
+    flow:
+      - get:
+          url: "/projections"
