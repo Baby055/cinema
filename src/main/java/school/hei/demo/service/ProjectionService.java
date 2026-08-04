@@ -34,9 +34,12 @@ public class ProjectionService {
     Projection projection =
         toSave.id() == null
             ? new Projection()
-            : projectionRepository.findById(toSave.id()).orElse(new Projection());
+            : projectionRepository
+                .findById(toSave.id())
+                .orElseThrow(
+                    () -> new NotFoundException("Projection " + toSave.id() + " not found"));
     if (projection.getId() == null) {
-      projection.setId(toSave.id() == null ? UUID.randomUUID() : toSave.id());
+      projection.setId(UUID.randomUUID());
     }
     projection.setDatetime(toSave.datetime());
     projection.setSeatPrice(toSave.seatPrice());

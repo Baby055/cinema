@@ -32,9 +32,11 @@ public class MovieService {
     Movie movie =
         toSave.id() == null
             ? new Movie()
-            : movieRepository.findById(toSave.id()).orElse(new Movie());
+            : movieRepository
+                .findById(toSave.id())
+                .orElseThrow(() -> new NotFoundException("Movie " + toSave.id() + " not found"));
     if (movie.getUuid() == null) {
-      movie.setUuid(toSave.id() == null ? UUID.randomUUID() : toSave.id());
+      movie.setUuid(UUID.randomUUID());
     }
     movie.setTitle(toSave.title());
     movie.setGenres(toSave.genres());
