@@ -30,60 +30,50 @@ import school.hei.demo.service.MovieService;
 @WebMvcTest(MovieController.class)
 @Import(SecurityConf.class)
 public class MovieControllerAuthorizationTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
-    private MovieService movieService;
-    @MockBean
-    private MovieMapper movieMapper;
-    @MockBean
-    private AppUserDetailsService appUserDetailsService;
+  @Autowired private MockMvc mockMvc;
+  @Autowired private ObjectMapper objectMapper;
+  @MockBean private MovieService movieService;
+  @MockBean private MovieMapper movieMapper;
+  @MockBean private AppUserDetailsService appUserDetailsService;
 
-    private String requestBody() throws Exception {
-        var toSave =
-                new SaveMovie(null, "Interstellar", Set.of(Genre.SCI_FI), "A space odyssey", 169L);
-        return objectMapper.writeValueAsString(toSave);
-    }
+  private String requestBody() throws Exception {
+    var toSave = new SaveMovie(null, "Interstellar", Set.of(Genre.SCI_FI), "A space odyssey", 169L);
+    return objectMapper.writeValueAsString(toSave);
+  }
 
-    @Test
-    @WithMockUser(roles = "CLIENT")
-    void client_cannot_create_a_movie() throws Exception {
-        mockMvc
-                .perform(put("/movies").contentType(MediaType.APPLICATION_JSON).content(requestBody()))
-                .andExpect(status().isForbidden());
-    }
+  @Test
+  @WithMockUser(roles = "CLIENT")
+  void client_cannot_create_a_movie() throws Exception {
+    mockMvc
+        .perform(put("/movies").contentType(MediaType.APPLICATION_JSON).content(requestBody()))
+        .andExpect(status().isForbidden());
+  }
 
-    @Test
-    @WithMockUser(roles = "EMPLOYEE")
-    void employee_cannot_create_a_movie() throws Exception {
-        mockMvc
-                .perform(put("/movies").contentType(MediaType.APPLICATION_JSON).content(requestBody()))
-                .andExpect(status().isForbidden());
-    }
+  @Test
+  @WithMockUser(roles = "EMPLOYEE")
+  void employee_cannot_create_a_movie() throws Exception {
+    mockMvc
+        .perform(put("/movies").contentType(MediaType.APPLICATION_JSON).content(requestBody()))
+        .andExpect(status().isForbidden());
+  }
 
-    @Test
-    @WithMockUser(roles = "MANAGER")
-    void manager_can_create_a_movie() throws Exception {
-        Movie saved = new Movie();
-        saved.setUuid(UUID.randomUUID());
-        saved.setTitle("Interstellar");
-        saved.setGenres(Set.of(Genre.SCI_FI));
-        saved.setDescription("A space odyssey");
-        saved.setDuration(Duration.ofMinutes(169));
-        when(movieService.save(any())).thenReturn(saved);
-        when(movieMapper.toRest(saved))
-                .thenReturn(
-                        new MovieRest(
-                                saved.getUuid(),
-                                saved.getTitle(),
-                                saved.getGenres(),
-                                saved.getDescription(),
-                                169));
+  @Test
+  @WithMockUser(roles = "MANAGER")
+  void manager_can_create_a_movie() throws Exception {
+    Movie saved = new Movie();
+    saved.setUuid(UUID.randomUUID());
+    saved.setTitle("Interstellar");
+    saved.setGenres(Set.of(Genre.SCI_FI));
+    saved.setDescription("A space odyssey");
+    saved.setDuration(Duration.ofMinutes(169));
+    when(movieService.save(any())).thenReturn(saved);
+    when(movieMapper.toRest(saved))
+        .thenReturn(
+            new MovieRest(
+                saved.getUuid(), saved.getTitle(), saved.getGenres(), saved.getDescription(), 169));
 
-        mockMvc
-                .perform(put("/movies").contentType(MediaType.APPLICATION_JSON).content(requestBody()))
-                .andExpect(status().isOk());
-    }
+    mockMvc
+        .perform(put("/movies").contentType(MediaType.APPLICATION_JSON).content(requestBody()))
+        .andExpect(status().isOk());
+  }
 }
