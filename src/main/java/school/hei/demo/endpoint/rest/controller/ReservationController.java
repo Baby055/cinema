@@ -1,5 +1,6 @@
 package school.hei.demo.endpoint.rest.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class ReservationController {
   }
 
   @PutMapping("/reservation")
-  public ReservationRest save(@RequestBody SaveReservation toSave) {
+  public ReservationRest save(@Valid @RequestBody SaveReservation toSave) {
     return reservationMapper.toRest(reservationService.save(toSave));
   }
 }

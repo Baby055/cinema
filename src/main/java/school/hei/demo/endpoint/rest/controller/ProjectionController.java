@@ -1,5 +1,6 @@
 package school.hei.demo.endpoint.rest.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class ProjectionController {
 
   @PreAuthorize("hasRole('MANAGER')")
   @PutMapping("/projection")
-  public ProjectionRest save(@RequestBody SaveProjection toSave) {
+  public ProjectionRest save(@Valid @RequestBody SaveProjection toSave) {
     return projectionMapper.toRest(projectionService.save(toSave));
   }
 }

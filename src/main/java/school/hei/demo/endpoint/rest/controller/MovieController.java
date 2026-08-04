@@ -1,5 +1,6 @@
 package school.hei.demo.endpoint.rest.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class MovieController {
 
   @PreAuthorize("hasRole('MANAGER')")
   @PutMapping("/movies")
-  public MovieRest save(@RequestBody SaveMovie toSave) {
+  public MovieRest save(@Valid @RequestBody SaveMovie toSave) {
     return movieMapper.toRest(movieService.save(toSave));
   }
 }
