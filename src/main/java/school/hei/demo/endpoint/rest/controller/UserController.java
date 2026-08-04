@@ -1,5 +1,6 @@
 package school.hei.demo.endpoint.rest.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public UserRest save(@RequestBody SaveUser toSave){
+    public UserRest save(@Valid @RequestBody SaveUser toSave){
         return userMapper.toRest(userService.save(toSave));
     }
 }

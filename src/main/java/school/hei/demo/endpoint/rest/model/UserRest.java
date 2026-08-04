@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public record UserRest (
     UUID id,
-    String firsName,
+    String firstName,
     String lastName,
-    LocalDate birhtdate,
+    LocalDate birthdate,
     String email,
-    String home,
+    String phone,
     UserRole role
 ){}
