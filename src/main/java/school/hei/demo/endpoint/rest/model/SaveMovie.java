@@ -13,4 +13,4 @@ public record SaveMovie(
     @NotBlank String title,
     @NotEmpty Set<Genre> genres,
     @NotBlank String description,
-    @NotNull @Positive long durationInMinutes) {}
+    @Positive long durationInMinutes) {}

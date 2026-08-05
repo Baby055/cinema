@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.Set;
 import java.util.UUID;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 import school.hei.demo.PojaGenerated;
 import school.hei.demo.model.Genre;
 
@@ -19,6 +20,7 @@ import school.hei.demo.model.Genre;
 public class JMovie {
   @Id
   @GeneratedValue
+  @UuidGenerator
   @Column(name = "id")
   private UUID id;
 

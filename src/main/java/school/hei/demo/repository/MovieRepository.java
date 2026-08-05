@@ -36,7 +36,7 @@ public class MovieRepository {
 
   public static JMovie toEntity(Movie movie) {
     return new JMovie(
-        movie.getUuid(),
+        movie.getId(),
         movie.getTitle(),
         movie.getGenres(),
         movie.getDescription(),

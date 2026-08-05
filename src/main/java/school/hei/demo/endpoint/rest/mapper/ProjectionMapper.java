@@ -11,7 +11,7 @@ public class ProjectionMapper {
         projection.getId(),
         projection.getDatetime(),
         projection.getSeatPrice(),
-        projection.getMovie().getUuid(),
+        projection.getMovie().getId(),
         projection.getRoom().getId());
   }
 }
