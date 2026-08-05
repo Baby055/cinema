@@ -2,7 +2,7 @@ spring:
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://ep-sweet-dream-ax63krct-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require}
     username: ${DATASOURCE_USERNAME:neondb_owner}
-    password: ${DATASOURCE_PASSWORD:npg_gA6GTjSW8PoI}
+    password: ${DATASOURCE_PASSWORD:npg_eI9qSuEcMo4B}
   jpa:
     hibernate:
       ddl-auto: validate
