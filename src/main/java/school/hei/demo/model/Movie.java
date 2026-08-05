@@ -14,7 +14,7 @@ import school.hei.demo.PojaGenerated;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Movie {
 
-  @EqualsAndHashCode.Include private UUID uuid;
+  @EqualsAndHashCode.Include private UUID id;
 
   private String title;
 

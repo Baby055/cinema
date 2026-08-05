@@ -28,11 +28,11 @@ public class ProjectionRepository {
   public Projection save(Projection projection) {
     JMovie jMovie =
         jMovieRepository
-            .findById(projection.getMovie().getUuid())
+            .findById(projection.getMovie().getId())
             .orElseThrow(
                 () ->
                     new IllegalStateException(
-                        "Movie " + projection.getMovie().getUuid() + " not found"));
+                        "Movie " + projection.getMovie().getId() + " not found"));
     JRoom jRoom =
         jRoomRepository
             .findById(projection.getRoom().getId())

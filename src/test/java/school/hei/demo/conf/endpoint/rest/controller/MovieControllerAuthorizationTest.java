@@ -61,7 +61,7 @@ public class MovieControllerAuthorizationTest {
   @WithMockUser(roles = "MANAGER")
   void manager_can_create_a_movie() throws Exception {
     Movie saved = new Movie();
-    saved.setUuid(UUID.randomUUID());
+    saved.setId(UUID.randomUUID());
     saved.setTitle("Interstellar");
     saved.setGenres(Set.of(Genre.SCI_FI));
     saved.setDescription("A space odyssey");
@@ -70,7 +70,7 @@ public class MovieControllerAuthorizationTest {
     when(movieMapper.toRest(saved))
         .thenReturn(
             new MovieRest(
-                saved.getUuid(), saved.getTitle(), saved.getGenres(), saved.getDescription(), 169));
+                saved.getId(), saved.getTitle(), saved.getGenres(), saved.getDescription(), 169));
 
     mockMvc
         .perform(put("/movies").contentType(MediaType.APPLICATION_JSON).content(requestBody()))

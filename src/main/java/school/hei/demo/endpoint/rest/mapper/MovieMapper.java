@@ -8,7 +8,7 @@ import school.hei.demo.model.Movie;
 public class MovieMapper {
   public MovieRest toRest(Movie movie) {
     return new MovieRest(
-        movie.getUuid(),
+        movie.getId(),
         movie.getTitle(),
         movie.getGenres(),
         movie.getDescription(),
