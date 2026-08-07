@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.hei.demo.endpoint.rest.mapper.MovieMapper;
 import school.hei.demo.endpoint.rest.model.MovieRest;
@@ -27,7 +26,6 @@ public class MovieController {
     return movieMapper.toRest(movieService.findById(id));
   }
 
-  @PreAuthorize("hasRole('MANAGER')")
   @PutMapping("/movies")
   public MovieRest save(@Valid @RequestBody SaveMovie toSave) {
     return movieMapper.toRest(movieService.save(toSave));
