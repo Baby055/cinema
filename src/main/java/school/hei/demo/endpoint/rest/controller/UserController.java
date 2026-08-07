@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.hei.demo.endpoint.rest.mapper.UserMapper;
 import school.hei.demo.endpoint.rest.model.SaveUser;
@@ -17,7 +16,6 @@ public class UserController {
   private final UserService userService;
   private final UserMapper userMapper;
 
-  @PreAuthorize("hasRole('MANAGER')")
   @GetMapping("/users")
   public List<UserRest> findAll() {
     return userService.findAll().stream().map(userMapper::toRest).toList();

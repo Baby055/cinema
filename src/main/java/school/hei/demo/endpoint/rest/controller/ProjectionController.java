@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.hei.demo.endpoint.rest.mapper.ProjectionMapper;
 import school.hei.demo.endpoint.rest.model.ProjectionRest;
@@ -27,7 +26,6 @@ public class ProjectionController {
     return projectionMapper.toRest(projectionService.findById(id));
   }
 
-  @PreAuthorize("hasRole('MANAGER')")
   @PutMapping("/projection")
   public ProjectionRest save(@Valid @RequestBody SaveProjection toSave) {
     return projectionMapper.toRest(projectionService.save(toSave));

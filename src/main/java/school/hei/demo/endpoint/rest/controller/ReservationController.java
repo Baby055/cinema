@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import school.hei.demo.endpoint.rest.mapper.ReservationMapper;
 import school.hei.demo.endpoint.rest.model.ReservationRest;
@@ -17,7 +16,6 @@ public class ReservationController {
   private final ReservationService reservationService;
   private final ReservationMapper reservationMapper;
 
-  @PreAuthorize("hasAnyRole('EMPLOYEE' , 'MANAGER')")
   @GetMapping("/reservations")
   public List<ReservationRest> findAll() {
     return reservationService.findAll().stream().map(reservationMapper::toRest).toList();
